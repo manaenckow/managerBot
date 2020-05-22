@@ -8,4 +8,4 @@ new Bot({token})
     .initLongpoll(groupId)
     .catch(console.error);
 
-console.log('Start'); 
+console.log('Start');
