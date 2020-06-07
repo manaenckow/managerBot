@@ -1,5 +1,5 @@
 module.exports = {
-    regexp: /^(\/|!)актив [1-9]+$/i,
+    regexp: /^(\/|!)актив/i,
     callback: (msg) => {
         let count = parseInt(msg.text.replace(/(\/|!)актив/, '')) || 15
         if(!(parseInt(count) >= 1 || parseInt(count) > 20)){
@@ -46,7 +46,7 @@ module.exports = {
                             })
                         }
 
-                    }, i * 10)
+                    }, i * 30)
                 })
                     setTimeout(() => {
                         api('messages.send', {

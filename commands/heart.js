@@ -1,5 +1,5 @@
 module.exports = {
-    regexp: /❤❤/g,
+    regexp: /❤❤|Максем|максем/g,
     callback: (msg, text) => {
        const api = msg.callMethod;
         api('messages.send', {

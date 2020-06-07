@@ -1,5 +1,5 @@
 module.exports = {
-    regexp: /^пред$/i,
+    regexp: /^(пред)$|(пред нахуй)$|(pred)$|(ghtl)$/i,
     callback: async (msg, text) => {
         const peer = msg.peer_id;
         const user = msg.from_id;
