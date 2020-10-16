@@ -1,7 +1,7 @@
 let load = false;
 let attept = 1;
 module.exports = {
-    regexp: /^\/рассылка2/i,
+    regexp: /^\/рассылкатот2/i,
     callback: async (msg, text) => {
 
         const peer = msg.peer_id;
@@ -93,9 +93,6 @@ module.exports = {
                 })
             }
         })
-
-        // царь горы 986a026180ee0cf68c48b81f9e297c9af0357283c0d04ffee28f2cfb1e74fc2ded1db897b664e86741784
-        // infection 08efa62256f070aa57a8efbfaec1443b85cda3c79be3217831acf63ee436550ffb373b069c5d892e484bf
-
+        
     },
 };

@@ -2,16 +2,16 @@ module.exports = {
     regexp: /^(\/|!)актив/i,
     callback: (msg) => {
         let count = parseInt(msg.text.replace(/(\/|!)актив/, '')) || 15
-        if(!(parseInt(count) >= 1 || parseInt(count) > 20)){
+        if (!(parseInt(count) >= 1 || parseInt(count) > 20)) {
             msg.send('Неверное число после <<!актив>>.');
             return;
         }
         count = parseInt(count)
-        if(count > 30){
+        if (count > 30) {
             msg.send('Не более 30.');
             return;
         }
-        if(count < 2){
+        if (count < 2) {
             msg.send('Не менее 2.');
             return;
         }
@@ -20,42 +20,42 @@ module.exports = {
         const api = msg.callMethod;
         const connection = msg.mysql;
 
-        if((peer - 2e9) < 0 || !(parseInt(id) > 0)) return;
+        if ((peer - 2e9) < 0 || !(parseInt(id) > 0)) return;
 
         connection.query('SELECT * FROM active WHERE chat = ? ORDER BY count DESC LIMIT ' + count, [peer],
-            (e,r) => {
-                if(!r[count - 1]) {
+            (e, r) => {
+                if (!r[count - 1]) {
                     msg.send(`В данном чате менее ${count} активных пользователей.`);
                     return
                 }
                 let rsp = ' ';
 
-                r.forEach((e, i) => {
-                    setTimeout(() => {
-                        if(e.user > 0){
-                            api('users.get', {
-                                user_ids: e.user
-                            }).then(usr => {
-                                rsp = rsp + `${i+1}. @id${e.user}(${usr[0].first_name} ${usr[0].last_name}) -- (${e.count} сообщения) \n`
-                            })
-                        } else {
-                            api('groups.getById', {
-                                group_id: e.user
-                            }).then(usr => {
-                                rsp = rsp + `${i+1}. @club${-e.user}(${usr[0].name}) [BOT] -- (${e.count} сообщения) \n`
-                            })
-                        }
+                let users = [];
+                let dataCount = [];
 
-                    }, i * 30)
+                r.forEach((e, i) => {
+                    if (e.user > 0) {
+                        users.push(e.user);
+                        dataCount.push(e.count);
+                    }
                 })
-                    setTimeout(() => {
-                        api('messages.send', {
-                            disable_mentions: 1,
-                            peer_id: peer,
-                            message: rsp,
-                            random_id: 0
-                        })
-                    }, count * 50)
+
+                console.log(users)
+
+                api('users.get', {
+                    user_ids: users.toString()
+                }).then(usrs => {
+                    usrs.forEach((e, i) => {
+                        rsp = rsp + `${i + 1}. @id${e.id}(${e.first_name} ${e.last_name}) -- (${dataCount[i]} сообщения) \n`
+                    })
+                    api('messages.send', {
+                        disable_mentions: 1,
+                        peer_id: peer,
+                        message: rsp,
+                        random_id: 0
+                    })
+                })
+
             })
     },
 };

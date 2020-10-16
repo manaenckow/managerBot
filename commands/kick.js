@@ -16,13 +16,13 @@ module.exports = {
         if ((curUser[0] && !secondUser[0]) || (curUser[0] && curUser[0].owner)) {
             api('messages.send', {
                 chat_id: peer - 2e9,
-                message: `#user${id}`,
+                message: `#user${id < 0 ? -id : id}`,
                 random_id: 0,
                 v: '5.103'
             }).then((res) => {
                 api('messages.removeChatUser', {
                     chat_id: peer - 2e9,
-                    member_id: id,
+                    member_id: id < 0 ? -id : id,
                     v: '5.103'
                 })
             });
