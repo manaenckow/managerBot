@@ -16,14 +16,13 @@ module.exports = {
     const peer = msg.peer_id;
     let id = msg.from_id;
     const api = msg.callMethod;
+    const conn = msg.asyncMysql;
     const connection = msg.mysql;
     if ((peer - 2e9) < 0 || !(parseInt(id) > 0)) return;
 
-    const [curUser] = await conn.query('SELECT * FROM admins WHERE chat = ? AND user = ?', [peer, user]);
-    const [secondUser] = await conn.query('SELECT * FROM admins WHERE chat = ? AND user = ?', [peer, id]);
+    const [curUser] = await conn.query('SELECT * FROM admins WHERE chat = ? AND user = ?', [peer, id]);
 
-    if ((curUser[0] && !secondUser[0]) || (curUser[0] && curUser[0].owner)) {
-
+    if (curUser[0]) {
       api('messages.getConversationMembers', {
         peer_id: peer,
       })
