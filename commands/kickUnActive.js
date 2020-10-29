@@ -21,6 +21,9 @@ module.exports = {
     if ((peer - 2e9) < 0 || !(parseInt(id) > 0)) return;
 
     const [curUser] = await conn.query('SELECT * FROM admins WHERE chat = ? AND user = ?', [peer, id]);
+    const [maxID] = await conn.query('SELECT MAX(id) FROM active');
+
+    console.log(maxID[0]['MAX(id)']);
 
     if (curUser[0]) {
       api('messages.getConversationMembers', {
@@ -28,9 +31,9 @@ module.exports = {
       })
           .then(res => {
             if (res) {
-              connection.query('SELECT * FROM active WHERE chat = ? AND count < ?', [peer, count + 1],
+              connection.query('SELECT * FROM active WHERE chat = ? AND count < ? AND id < ?', [peer, count + 1, maxID[0]['MAX(id)'] - 100],
                   (e, r) => {
-                    if (!r[0]) {
+                      if (!r || !r[0]) {
                       msg.send(`В данном чате нет пользователей, который написали менее ${count} сообщений.`);
                     } else {
                       let unActive = [];
