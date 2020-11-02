@@ -1,6 +1,5 @@
 const {Bot} = require('./lib/core.js');
-const {token} = require('./config.json');
-const groupId = 191838894;
+const {token, groupId} = require('./config.json');
 
 new Bot({token})
     .attachCommands('commands')
